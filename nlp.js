@@ -2,6 +2,7 @@ const NODE = typeof process !== "undefined" && process.release.name === "node";
 
 if (NODE) {
   console.log("Node.js environment detected");
+  require("@tensorflow/tfjs");
   require("@tensorflow/tfjs-node");
   // var is needed here to hoist, in browser this is already declared
   var use = require("@tensorflow-models/universal-sentence-encoder");
