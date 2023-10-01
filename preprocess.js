@@ -29,15 +29,15 @@ async function makeDataset(name, mapFunction) {
 
   // Accumulate preceding lines for context
   let episode = targets[0].no_in_show;
-  for (let i = WINDOW_SIZE; i < targets.length; i++) {
+  for (let i = WINDOW_SIZE - 1; i < targets.length; i++) {
     const target = targets[i];
     // Skip forward by WINDOW_SIZE if we're in a new episode
     if (target.no_in_show !== episode) {
       episode = target.no_in_show;
-      i += WINDOW_SIZE;
+      i += WINDOW_SIZE - 1;
       continue;
     }
-    const start = i - WINDOW_SIZE;
+    const start = i - (WINDOW_SIZE - 1);
     const context = targets.slice(start, i + 1);
     target.text = context.map((c) => `${c.speaker}: ${c.line}`).join("\n");
   }
@@ -45,7 +45,6 @@ async function makeDataset(name, mapFunction) {
   targets = targets.filter((t) => t.text);
 
   await NLP.embedObjects(targets, "text");
-  targets = await NLP.filterMeaningful(targets);
   ds.targets = targets;
 
   await writeJS(outPath, name, ds);
