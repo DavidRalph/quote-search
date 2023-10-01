@@ -1,6 +1,6 @@
 const fs = require("fs/promises");
 const csv = require("async-csv");
-const NLP = require("./nlp.js");
+const NLP = require("./public/nlp.js");
 
 const WINDOW_SIZE = 5;
 
@@ -20,7 +20,7 @@ async function main() {
 async function makeDataset(name, mapFunction) {
   const infoPath = "data_raw/" + name + "/info.json";
   const dataPath = "data_raw/" + name + "/dataset.csv";
-  const outPath = "data/" + name + ".js";
+  const outPath = "public/data/" + name + ".js";
 
   const ds = await readJSON(infoPath);
   ds.updated = new Date().toISOString();
