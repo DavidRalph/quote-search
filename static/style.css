@@ -1,0 +1,45 @@
+main {
+  margin: 0 auto;
+  max-width: 50rem;
+  padding: 2rem 1rem;
+}
+
+/* search bar and submit button fill full width */
+#quoteSearch {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+#quoteSearch input[type="search"] {
+  flex-grow: 1;
+  margin-right: 1rem;
+}
+
+#quoteResults table {
+  margin-top: 3rem;
+  border-collapse: collapse;
+}
+
+.quote-body {
+  vertical-align: top;
+}
+
+td,
+th {
+  padding: 0.3rem;
+}
+td {
+  text-align: justify;
+}
+th {
+  width: 8rem;
+  text-align: right;
+  padding-right: 1em;
+}
+
+.quote-source {
+  text-align: center;
+  display: block;
+  margin-top: 1rem;
+}
