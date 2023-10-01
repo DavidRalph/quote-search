@@ -15,17 +15,35 @@ async function main() {
     no_in_season: t.ep_number,
     no_in_show: t.total_number,
   }));
+  await makeDataset(
+    "atla",
+    (t) => ({
+      line: t.Character ? t.script : `[${t.script}]`,
+      speaker: t.Character || "Narrator",
+      season: t.Book,
+      no_in_season: t.ep_number,
+      no_in_show: t.total_number,
+    }),
+    true,
+  );
 }
 
-async function makeDataset(name, mapFunction) {
+async function makeDataset(name, mapFunction, dialogueOnly = false) {
   const infoPath = "data_raw/" + name + "/info.json";
   const dataPath = "data_raw/" + name + "/dataset.csv";
-  const outPath = "public/data/" + name + ".js";
 
   const ds = await readJSON(infoPath);
-  ds.updated = new Date().toISOString();
 
   let targets = (await readCSV(dataPath)).map(mapFunction);
+
+  if (dialogueOnly) {
+    name = name + "_dialogue";
+    targets = targets.map((t) => {
+      t.line = t.line.replace(/\[.*\]/, "").trim();
+      return t;
+    });
+    targets = targets.filter((t) => t.line && t.speaker !== "Narrator");
+  }
 
   // Accumulate preceding lines for context
   let episode = targets[0].no_in_show;
@@ -51,7 +69,7 @@ async function makeDataset(name, mapFunction) {
   await NLP.embedObjects(targets, "text");
   ds.targets = targets;
 
-  await writeJS(outPath, name, ds);
+  await writeJS("public/data/" + name + ".js", name, ds);
 }
 
 async function readCSV(filePath) {

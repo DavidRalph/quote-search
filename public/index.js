@@ -11,13 +11,16 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 async function searchQuotes() {
-
   document.querySelector("#quoteResults").innerHTML = "<p>Searching...</p>";
 
+  const query = document.querySelector("[name=query]").value;
+  const dsName = document.querySelector("[name=dataset]").value;
+  console.log(`Searching in ${dsName} for: ${query}`);
 
-  const query = document.querySelector("#quoteSearch input").value;
-  console.log(`Searching for quote: ${query}`);
-  const ranked = await NLP.rank(query, atla.targets);
+  let ds = atla;
+  if (dsName === "atla_dialogue") ds = atla_dialogue;
+
+  const ranked = await NLP.rank(query, ds.targets);
 
   // Clear previous results
   document.querySelector("#quoteResults").innerHTML = "";
