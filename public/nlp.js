@@ -65,7 +65,7 @@ class NLP {
    * @param {[{embedding: string}]} targets
    * @returns {[{score: Float, target: Object}]}
    */
-  static async rank(query, targets) {
+  static async rank(query, targets, dedupe = true) {
     console.log(`Ranking ${targets.length} items for query...`);
     const queryEmbedding = await NLP.embed([query]);
 
@@ -77,6 +77,22 @@ class NLP {
     const ranked = scores
       .map((s, i) => ({ score: s, target: targets[i] }))
       .sort((a, b) => b.score - a.score);
+
+    if (dedupe) {
+      const seen = [];
+      const unique = [];
+      for (let i = 0; i < ranked.length; i++) {
+        const target = ranked[i].target;
+        const line_numbers = target.line_numbers;
+        const intersection = line_numbers.filter((n) => seen.includes(n));
+        if (intersection.length === 0) {
+          unique.push(ranked[i]);
+          seen.push(...line_numbers);
+        }
+      }
+      return unique;
+    }
+
     return ranked;
   }
 

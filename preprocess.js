@@ -40,6 +40,10 @@ async function makeDataset(name, mapFunction) {
     const start = i - (WINDOW_SIZE - 1);
     const context = targets.slice(start, i + 1);
     target.text = context.map((c) => `${c.speaker}: ${c.line}`).join("\n");
+    target.line_numbers = [];
+    for (let j = i - WINDOW_SIZE + 1; j <= i; j++) {
+      target.line_numbers.push(j);
+    }
   }
 
   targets = targets.filter((t) => t.text);
