@@ -26,6 +26,25 @@ async function main() {
     }),
     true,
   );
+  // ATLK
+  await makeDataset("atlk", (t) => ({
+    line: t.Character ? t.script : `[${t.script}]`,
+    speaker: t.Character || "Narrator",
+    season: t.Book,
+    no_in_season: t.ep_number,
+    no_in_show: t.total_number,
+  }));
+  await makeDataset(
+    "atlk",
+    (t) => ({
+      line: t.Character ? t.script : `[${t.script}]`,
+      speaker: t.Character || "Narrator",
+      season: t.Book,
+      no_in_season: t.ep_number,
+      no_in_show: t.total_number,
+    }),
+    true,
+  );
 }
 
 async function makeDataset(name, mapFunction, dialogueOnly = false) {

@@ -19,6 +19,8 @@ async function searchQuotes() {
 
   let ds = atla;
   if (dsName === "atla_dialogue") ds = atla_dialogue;
+  if (dsName === "atlk") ds = atlk;
+  if (dsName === "atlk_dialogue") ds = atlk_dialogue;
 
   const ranked = await NLP.rank(query, ds.targets);
 
